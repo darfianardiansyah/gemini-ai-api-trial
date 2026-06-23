@@ -76,12 +76,13 @@ async function handleFormSubmit(e) {
     // Stop loading animation
     stopLoadingAnimation();
 
-    // Extract error message from server response or use default
-    let errorMessage = 'Failed to get response from server.';
+    // Extract and format error message
+    let errorMessage = 'Gagal mendapatkan respons dari server.';
+    
     if (error.serverError) {
-      errorMessage = error.serverError;
+      errorMessage = formatErrorMessage(error.serverError);
     } else if (error.message) {
-      errorMessage = error.message;
+      errorMessage = formatErrorMessage(error.message);
     }
 
     // Show error message in chat
@@ -99,6 +100,37 @@ async function handleFormSubmit(e) {
       addMessageToChat('bot', errorMessage);
     }
   }
+}
+
+// ============================================
+// Error Formatting
+// ============================================
+
+function formatErrorMessage(errorMsg) {
+  // Handle quota exceeded error
+  if (errorMsg.includes('exceeded') || errorMsg.includes('quota') || errorMsg.includes('RESOURCE_EXHAUSTED')) {
+    return '⏳ Kuota API telah habis. Free tier dibatasi 20 permintaan per hari. Silahkan coba lagi nanti atau upgrade ke paket berbayar.';
+  }
+  
+  // Handle authentication error
+  if (errorMsg.includes('unauthenticated') || errorMsg.includes('UNAUTHENTICATED')) {
+    return '🔐 API key tidak valid. Periksa kembali GOOGLE_API_KEY di file .env';
+  }
+  
+  // Handle invalid argument
+  if (errorMsg.includes('INVALID_ARGUMENT')) {
+    return '❌ Permintaan tidak valid. Silahkan coba lagi dengan pertanyaan yang jelas.';
+  }
+  
+  // Extract key parts from long error messages
+  if (errorMsg.length > 200) {
+    // Extract the main error message (usually in first or second line)
+    const lines = errorMsg.split('\n');
+    const mainError = lines[0] || errorMsg.substring(0, 150);
+    return mainError + '...';
+  }
+  
+  return errorMsg;
 }
 
 // ============================================
@@ -153,10 +185,18 @@ async function sendChatRequest(conversation) {
   const data = await response.json();
 
   if (!response.ok) {
-    // Extract error message from server response
-    let errorMsg = `Server error: ${response.status} ${response.statusText}`;
-    if (data.error && data.error.message) {
-      errorMsg = data.error.message;
+    // Extract and format error message from server response
+    let errorMsg = `Error: ${response.status} ${response.statusText}`;
+    
+    // Try to extract specific error message
+    if (data.error) {
+      if (typeof data.error === 'string') {
+        // If error is a string
+        errorMsg = data.error;
+      } else if (data.error.message) {
+        // If error is an object with message property
+        errorMsg = data.error.message;
+      }
     } else if (data.message) {
       errorMsg = data.message;
     }
