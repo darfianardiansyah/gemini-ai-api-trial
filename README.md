@@ -559,41 +559,7 @@ Kontribusi sangat diterima! Langkah-langkahnya:
 - 🌍 Language localization
 - ⚡ Performance optimization
 
-## 📄 License
 
-Project ini dilisensikan di bawah **ISC License** — Lihat `package.json` untuk detail lengkap.
-
-## 📞 Support & Issues
-
-Temukan bug atau ada pertanyaan? 
-
-1. Buka [GitHub Issues](https://github.com/yourusername/gemini-chatbot-api/issues)
-2. Jelaskan masalah dengan detail
-3. Sertakan:
-   - Error message atau screenshot
-   - Steps to reproduce
-   - Expected vs actual behavior
-   - Environment info (Node version, OS, dll)
-
-## 🙏 Acknowledgments
-
-- **Google Gemini API** — Powerful AI capabilities
-- **Express.js** — Web framework
-- **Open Source Community** — Semua contributors
-
-## 🎯 Roadmap
-
-Fitur yang akan datang:
-
-- [ ] Dark mode theme
-- [ ] Chat history persistence (localStorage)
-- [ ] Export conversation as PDF
-- [ ] Multiple languages support
-- [ ] Voice input/output
-- [ ] Health metrics tracking
-- [ ] Integration dengan wearable devices
-- [ ] Progressive Web App (PWA)
-- [ ] Offline mode support
 
 ---
 
@@ -609,11 +575,3 @@ Jika project ini bermanfaat untuk Anda, jangan lupa:
 **Happy Coding! 🎉**
 
 ---
-
-<div align="center">
-
-**Made with ❤️ by [Your Name]**
-
-[GitHub](https://github.com/yourusername) • [Website](https://yourwebsite.com) • [Email](mailto:your.email@example.com)
-
-</div>
