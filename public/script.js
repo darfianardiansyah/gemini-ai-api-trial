@@ -90,7 +90,10 @@ async function handleFormSubmit(e) {
       errorElement &&
       errorElement.classList.contains('loading')
     ) {
-      errorElement.textContent = errorMessage;
+      const contentDiv = errorElement.querySelector('div');
+      if (contentDiv) {
+        contentDiv.textContent = errorMessage;
+      }
       errorElement.classList.remove('loading');
     } else {
       addMessageToChat('bot', errorMessage);
@@ -103,21 +106,24 @@ async function handleFormSubmit(e) {
 // ============================================
 
 function addLoadingMessage() {
-  const loadingDiv = document.createElement('div');
-  loadingDiv.classList.add('message', 'bot', 'loading');
-  loadingDiv.textContent = 'Thinking';
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('message', 'bot', 'loading');
 
-  chatBox.appendChild(loadingDiv);
+  const contentDiv = document.createElement('div');
+  contentDiv.textContent = 'Thinking';
+
+  messageDiv.appendChild(contentDiv);
+  chatBox.appendChild(messageDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
 
   // Start animated dots
   let dotCount = 0;
   loadingAnimationInterval = setInterval(() => {
     dotCount = (dotCount + 1) % 4;
-    loadingDiv.textContent = 'Thinking' + '.'.repeat(dotCount);
+    contentDiv.textContent = 'Thinking' + '.'.repeat(dotCount);
   }, 500);
 
-  return loadingDiv;
+  return contentDiv;
 }
 
 function stopLoadingAnimation() {
@@ -170,12 +176,15 @@ async function sendChatRequest(conversation) {
 function addMessageToChat(sender, text) {
   const messageDiv = document.createElement('div');
   messageDiv.classList.add('message', sender);
-  messageDiv.textContent = text;
 
+  const contentDiv = document.createElement('div');
+  contentDiv.textContent = text;
+
+  messageDiv.appendChild(contentDiv);
   chatBox.appendChild(messageDiv);
 
   // Auto-scroll to bottom
   chatBox.scrollTop = chatBox.scrollHeight;
 
-  return messageDiv;
+  return contentDiv;
 }

@@ -1,19 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gemini AI Chatbot</title>
+  <title>Health Buddy - Asisten Kesehatan AI</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <h1>Gemini AI Chatbot</h1>
-    <div id="chat-box" class="chat-box"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required />
-      <button type="submit">Send</button>
-    </form>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a10 10 0 100 20 10 10 0 000-20zm0 0V4m0 2a10 10 0 100 20 10 10 0 000-20z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9"/>
+          </svg>
+          <h1 class="brand-name">Health Buddy</h1>
+        </div>
+        <p class="brand-subtitle">Asisten Kesehatan AI Terpercaya</p>
+      </div>
+    </header>
+
+    <!-- Main Chat Container -->
+    <main class="chat-container">
+      <div class="chat-wrapper">
+        <!-- Chat Box -->
+        <div id="chat-box" class="chat-box"></div>
+
+        <!-- Input Form -->
+        <form id="chat-form" class="chat-form">
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="user-input" 
+              class="chat-input"
+              placeholder="Tanya tentang kesehatan Anda..." 
+              autocomplete="off" 
+              required 
+            />
+            <button type="submit" class="btn-send">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+              </svg>
+              <span>Kirim</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Footer Info -->
+        <div class="chat-footer">
+          <p class="footer-text">💡 Tip: Tanyakan tentang gaya hidup sehat, nutrisi, olahraga, atau kesehatan umum</p>
+        </div>
+      </div>
+    </main>
   </div>
   <script src="script.js"></script>
 </body>
