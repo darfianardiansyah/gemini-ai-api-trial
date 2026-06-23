@@ -66,16 +66,23 @@ async function handleFormSubmit(e) {
   } catch (error) {
     console.error('Error:', error);
 
+    // Extract error message from server response or use default
+    let errorMessage = 'Failed to get response from server.';
+    if (error.serverError) {
+      errorMessage = error.serverError;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+
     // Show error message in chat
     const errorElement = chatBox.lastElementChild;
     if (
       errorElement &&
       errorElement.textContent === 'Thinking...'
     ) {
-      errorElement.textContent =
-        'Failed to get response from server.';
+      errorElement.textContent = errorMessage;
     } else {
-      addMessageToChat('bot', 'Failed to get response from server.');
+      addMessageToChat('bot', errorMessage);
     }
   }
 }
@@ -97,13 +104,22 @@ async function sendChatRequest(conversation) {
     body: JSON.stringify(payload),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error(
-      `Server error: ${response.status} ${response.statusText}`
-    );
+    // Extract error message from server response
+    let errorMsg = `Server error: ${response.status} ${response.statusText}`;
+    if (data.error && data.error.message) {
+      errorMsg = data.error.message;
+    } else if (data.message) {
+      errorMsg = data.message;
+    }
+
+    const error = new Error(errorMsg);
+    error.serverError = errorMsg;
+    throw error;
   }
 
-  const data = await response.json();
   return data;
 }
 
