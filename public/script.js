@@ -10,6 +10,9 @@ const chatBox = document.getElementById('chat-box');
 // Conversation history (stores all messages)
 let conversationHistory = [];
 
+// Loading animation tracker
+let loadingAnimationInterval = null;
+
 // ============================================
 // Event Listeners
 // ============================================
@@ -43,11 +46,14 @@ async function handleFormSubmit(e) {
     input.value = '';
     input.focus();
 
-    // Show thinking message with unique ID for replacement
-    const thinkingElement = addMessageToChat('bot', 'Thinking...');
+    // Show animated loading indicator
+    const loadingElement = addLoadingMessage();
 
     // Send request to backend
     const response = await sendChatRequest(conversationHistory);
+
+    // Stop loading animation
+    stopLoadingAnimation();
 
     // Check if we got a valid response
     if (response && response.result) {
@@ -56,15 +62,19 @@ async function handleFormSubmit(e) {
       // Add AI message to history
       conversationHistory.push({ role: 'model', text: aiMessage });
 
-      // Replace "Thinking..." with actual response
-      thinkingElement.textContent = aiMessage;
+      // Replace loading indicator with actual response
+      loadingElement.textContent = aiMessage;
+      loadingElement.classList.remove('loading');
     } else {
       // No result in response
-      thinkingElement.textContent =
-        'Sorry, no response received.';
+      loadingElement.textContent = 'Sorry, no response received.';
+      loadingElement.classList.remove('loading');
     }
   } catch (error) {
     console.error('Error:', error);
+
+    // Stop loading animation
+    stopLoadingAnimation();
 
     // Extract error message from server response or use default
     let errorMessage = 'Failed to get response from server.';
@@ -78,12 +88,42 @@ async function handleFormSubmit(e) {
     const errorElement = chatBox.lastElementChild;
     if (
       errorElement &&
-      errorElement.textContent === 'Thinking...'
+      errorElement.classList.contains('loading')
     ) {
       errorElement.textContent = errorMessage;
+      errorElement.classList.remove('loading');
     } else {
       addMessageToChat('bot', errorMessage);
     }
+  }
+}
+
+// ============================================
+// Loading Animation
+// ============================================
+
+function addLoadingMessage() {
+  const loadingDiv = document.createElement('div');
+  loadingDiv.classList.add('message', 'bot', 'loading');
+  loadingDiv.textContent = 'Thinking';
+
+  chatBox.appendChild(loadingDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  // Start animated dots
+  let dotCount = 0;
+  loadingAnimationInterval = setInterval(() => {
+    dotCount = (dotCount + 1) % 4;
+    loadingDiv.textContent = 'Thinking' + '.'.repeat(dotCount);
+  }, 500);
+
+  return loadingDiv;
+}
+
+function stopLoadingAnimation() {
+  if (loadingAnimationInterval) {
+    clearInterval(loadingAnimationInterval);
+    loadingAnimationInterval = null;
   }
 }
 
