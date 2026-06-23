@@ -5,6 +5,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 
+//setup __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
@@ -13,6 +17,9 @@ const GEMINI_MODEL = 'gemini-2.5-flash';
 
 app.use(cors());
 app.use(express.json());
+
+// serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
